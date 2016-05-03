@@ -1,2 +1,13 @@
-inlineplz
-flask
+Flask>=0.10.1
+github3.py>=0.9.5
+inlineplz>=0.13.0
+itsdangerous>=0.24
+Jinja2>=2.8
+MarkupSafe>=0.23
+PyYAML>=3.11
+requests>=2.10.0
+scandir>=1.2
+unidiff>=0.5.2
+uritemplate.py>=0.3.0
+Werkzeug>=0.11.9
+xmltodict>=0.10.1
