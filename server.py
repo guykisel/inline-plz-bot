@@ -26,43 +26,42 @@ def root():
     token = os.environ.get('TOKEN')
     interface = 'github'
     url = os.environ.get('URL', 'https://github.com')
-    zero_exit = True
-    install = True
 
     branch = data['pull_request']['head']['ref']
     pull_request_slug = data['pull_request']['head']['repo']['full_name']
-    clone_url = data['pull_request']['head']['repo']['full_name']['clone_url']
+    clone_url = data['pull_request']['head']['repo']['clone_url']
 
     # make temp dir
     tempdir = tempfile.mkdtemp()
     time.sleep(1)
 
-    # git clone into temp dir
-    subprocess.call(
-        ['git', 'clone', '--depth', '1', clone_url],
-        cwd=tempdir
-    )
-    time.sleep(1)
+    try:
+        # git clone into temp dir
+        subprocess.call(
+            ['git', 'clone', '--depth', '1', clone_url + '#' + branch],
+            cwd=tempdir
+        )
+        time.sleep(1)
 
-    # run inline-plz in temp dir
-    subprocess.call(
-        [
-            'inline-plz',
-            '--autorun',
-            '--repo-slug={}'.format(repo_slug),
-            '--pull-request={}'.format(pull_request),
-            '--url={}'.format(url),
-            '--token={}'.format(token),
-            '--interface={}'.format(interface),
-            '--zero-exit'
-        ],
-        cwd=os.path.join(tempdir, name)
-    )
-    time.sleep(1)
-
-    # delete temp dir
-    shutil.rmtree(tempdir)
-    time.sleep(1)
+        # run inline-plz in temp dir
+        subprocess.call(
+            [
+                'inline-plz',
+                '--autorun',
+                '--repo-slug={}'.format(repo_slug),
+                '--pull-request={}'.format(pull_request),
+                '--url={}'.format(url),
+                '--token={}'.format(token),
+                '--interface={}'.format(interface),
+                '--zero-exit'
+            ],
+            cwd=os.path.join(tempdir, name)
+        )
+        time.sleep(1)
+    finally:
+        # delete temp dir
+        shutil.rmtree(tempdir)
+        time.sleep(1)
 
 
 if __name__ == '__main__':
