@@ -31,6 +31,13 @@ def root():
     pull_request_slug = data['pull_request']['head']['repo']['full_name']
     clone_url = data['pull_request']['head']['repo']['clone_url']
 
+    print('Starting inline-plz:')
+    print('PR: {}'.format(pull_request))
+    print('Repo slug: {}'.format(repo_slug))
+    print('Name: {}'.format(name))
+    print('SHA: {}'.format(sha))
+    print('Clone URL: {}'.format(clone_url))
+
     # make temp dir
     tempdir = tempfile.mkdtemp()
     time.sleep(1)
@@ -57,7 +64,7 @@ def root():
                 '--autorun',
                 '--repo-slug={}'.format(repo_slug),
                 '--pull-request={}'.format(pull_request),
-                '--url={}'.format(url),
+                # '--url={}'.format(url),
                 '--token={}'.format(token),
                 '--interface={}'.format(interface),
                 '--zero-exit'
