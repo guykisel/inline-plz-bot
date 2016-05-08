@@ -63,7 +63,7 @@ def root():
         time.sleep(1)
 
 # don't do this
-def blah(what=[]):
+def blah(what=[], mutablesLol = { 'hi': 2 }):
     return
 
 
