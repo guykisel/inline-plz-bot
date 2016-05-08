@@ -39,7 +39,7 @@ def root():
 
     # git clone into temp dir
     subprocess.call(
-        ['git', 'clone', clone_url],
+        ['git', 'clone', '--depth', '1', clone_url],
         cwd=tempdir
     )
     time.sleep(1)
