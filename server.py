@@ -27,7 +27,7 @@ def root():
     interface = 'github'
     url = os.environ.get('URL', 'https://github.com')
 
-    branch = data['pull_request']['head']['ref']
+    sha = data['pull_request']['head']['sha']
     pull_request_slug = data['pull_request']['head']['repo']['full_name']
     clone_url = data['pull_request']['head']['repo']['clone_url']
 
@@ -37,14 +37,21 @@ def root():
 
     try:
         # git clone into temp dir
-        subprocess.call(
-            ['git', 'clone', '--depth', '1', clone_url + '#' + branch],
+        subprocess.check_call(
+            ['git', 'clone', clone_url],
             cwd=tempdir
         )
         time.sleep(1)
 
+        # git checkout our sha
+        subprocess.check_call(
+            ['git', 'checkout', sha],
+            cwd=os.path.join(tempdir, name)
+        )
+        time.sleep(1)
+
         # run inline-plz in temp dir
-        subprocess.call(
+        subprocess.check_call(
             [
                 'inline-plz',
                 '--autorun',
@@ -60,6 +67,7 @@ def root():
         time.sleep(1)
     finally:
         # delete temp dir
+        time.sleep(1)
         shutil.rmtree(tempdir)
         time.sleep(1)
 
