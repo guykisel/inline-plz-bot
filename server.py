@@ -1,5 +1,7 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
 import os
 import shutil
@@ -36,14 +38,14 @@ def root():
     time.sleep(1)
 
     # git clone into temp dir
-    subprocess.check_output(
+    subprocess.call(
         ['git', 'clone', clone_url],
         cwd=tempdir
-    ).strip().decode('utf-8', errors='replace')
+    )
     time.sleep(1)
 
     # run inline-plz in temp dir
-    subprocess.check_output(
+    subprocess.call(
         [
             'inline-plz',
             '--autorun',
@@ -55,7 +57,7 @@ def root():
             '--zero-exit'
         ],
         cwd=os.path.join(tempdir, name)
-    ).strip().decode('utf-8', errors='replace')
+    )
     time.sleep(1)
 
     # delete temp dir
