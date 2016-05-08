@@ -12,7 +12,6 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-
 @app.route('/', methods=['GET', 'POST'])
 def root():
     if request.method == 'GET':
@@ -62,6 +61,10 @@ def root():
         # delete temp dir
         shutil.rmtree(tempdir)
         time.sleep(1)
+
+# don't do this
+def blah(what=[]):
+    return
 
 
 if __name__ == '__main__':
