@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import tempfile
 import time
+import traceback
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -20,16 +21,20 @@ def root():
 
     # https://developer.github.com/v3/activity/events/types/#pullrequestevent
     data = request.get_json()
-    pull_request = data['pull_request']['number']
-    repo_slug = data['repository']['full_name']
-    name = data['repository']['name']
-    token = os.environ.get('TOKEN')
-    interface = 'github'
-    url = os.environ.get('URL', 'https://github.com')
+    try:
+        pull_request = data['pull_request']['number']
+        repo_slug = data['repository']['full_name']
+        name = data['repository']['name']
+        token = os.environ.get('TOKEN')
+        interface = 'github'
+        url = os.environ.get('URL', 'https://github.com')
 
-    sha = data['pull_request']['head']['sha']
-    pull_request_slug = data['pull_request']['head']['repo']['full_name']
-    clone_url = data['pull_request']['head']['repo']['clone_url']
+        sha = data['pull_request']['head']['sha']
+        pull_request_slug = data['pull_request']['head']['repo']['full_name']
+        clone_url = data['pull_request']['head']['repo']['clone_url']
+    except KeyError:
+        traceback.print_exc()
+        return 'Invalid pull request data.'
 
     print('Starting inline-plz:')
     print('PR: {}'.format(pull_request))
