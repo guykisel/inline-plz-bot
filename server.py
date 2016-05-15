@@ -11,7 +11,7 @@ import tempfile
 import threading
 import time
 import traceback
-from flask import Flask, request
+from flask import Flask, request, redirect
 
 app = Flask(__name__)
 
@@ -86,7 +86,7 @@ def lint(data):
 @app.route('/', methods=['GET', 'POST'])
 def root():
     if request.method == 'GET':
-        return 'https://github.com/guykisel/inline-plz-bot'
+        return redirect('https://github.com/guykisel/inline-plz-bot', code=302)
 
     # https://developer.github.com/v3/activity/events/types/#pullrequestevent
     data = request.get_json()
