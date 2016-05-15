@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
@@ -28,7 +29,7 @@ def root():
         token = os.environ.get('TOKEN')
         interface = 'github'
         url = os.environ.get('URL', 'https://github.com')
-
+        event_type = data['action']
         sha = data['pull_request']['head']['sha']
         pull_request_slug = data['pull_request']['head']['repo']['full_name']
         clone_url = data['pull_request']['head']['repo']['clone_url']
@@ -37,11 +38,15 @@ def root():
         return 'Invalid pull request data.'
 
     print('Starting inline-plz:')
+    print('Event: {}'.format(event_type))
     print('PR: {}'.format(pull_request))
     print('Repo slug: {}'.format(repo_slug))
     print('Name: {}'.format(name))
     print('SHA: {}'.format(sha))
     print('Clone URL: {}'.format(clone_url))
+
+    if event_type not in ['opened', 'synchronize']:
+        return 'Unsupported event type: {}'.format(event_type)
 
     # make temp dir
     tempdir = tempfile.mkdtemp()
