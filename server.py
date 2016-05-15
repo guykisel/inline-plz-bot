@@ -8,6 +8,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import threading
 import time
 import traceback
 from flask import Flask, request
@@ -15,13 +16,7 @@ from flask import Flask, request
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET', 'POST'])
-def root():
-    if request.method == 'GET':
-        return 'https://github.com/guykisel/inline-plz-bot'
-
-    # https://developer.github.com/v3/activity/events/types/#pullrequestevent
-    data = request.get_json()
+def lint(data):
     try:
         pull_request = data['pull_request']['number']
         repo_slug = data['repository']['full_name']
@@ -46,7 +41,7 @@ def root():
     print('Clone URL: {}'.format(clone_url))
 
     if event_type not in ['opened', 'synchronize']:
-        return 'Unsupported event type: {}'.format(event_type)
+        return
 
     # make temp dir
     tempdir = tempfile.mkdtemp()
@@ -86,8 +81,17 @@ def root():
         # delete temp dir
         time.sleep(1)
         shutil.rmtree(tempdir)
-        time.sleep(1)
 
+
+@app.route('/', methods=['GET', 'POST'])
+def root():
+    if request.method == 'GET':
+        return 'https://github.com/guykisel/inline-plz-bot'
+
+    # https://developer.github.com/v3/activity/events/types/#pullrequestevent
+    data = request.get_json()
+    lint_thread = threading.Thread(target=lint, args=(data, ))
+    lint_thread.start()
     return 'Success!'
 
 
