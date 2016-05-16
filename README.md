@@ -4,13 +4,13 @@ Web service version of https://github.com/guykisel/inline-plz - lints your Pull 
 
 ![Inline lint!](inline-plz-bot.png?raw=true =829x562)
 
-# How do I use this?
+## How do I use this
 
 1. Settings -> Webhooks -> Add Webhook
 1. Payload URL: `https://inlineplz.herokuapp.com/`
 1. Let me select individual events: select **Pull Request**
 
-# Why do I want to use this?
+## Why do I want to use this
 
 If you use static analysis with your pull requests, you've probably gotten used to this workflow:
 
@@ -24,14 +24,14 @@ If you use static analysis with your pull requests, you've probably gotten used 
 
 This bot gives you the static analysis output directly inlined in your PR diffs so you can understand failures more efficiently.
 
-# How does it work?
+## How does it work
 
 1. This repo contains a simple little Flask server that listens for Github webhooks
 1. When someone opens a pull request or pushes up some new commits, the repo's webhook POSTs to the Flask server
 1. The Flask server reads the Github PR data (branch, sha, etc.), clones the repo, and shells out to inline-plz
 1. inline-plz runs static analysis tools and uses the Github API to comment on the PR with any errors it finds
 
-# This is cool, how can I contribute?
+## This is cool, how can I contribute
 
 * Report bugs and feature requests!
     * Issues for the webservice/bot should go in this repo (inline-plz-bot)
