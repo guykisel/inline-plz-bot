@@ -89,7 +89,7 @@ def lint(data):
         ]
 
         if clone_dotfiles(url, org, dotfile_dir):
-            args.append('--config-dir="{}"'.format(
+            args.append('--config-dir={}'.format(
                 os.path.join(dotfile_dir, 'dotfiles')
             ))
         time.sleep(1)
