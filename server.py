@@ -17,10 +17,16 @@ app = Flask(__name__)
 
 
 def clone_dotfiles(url, org, tempdir):
-    return subprocess.call(
-        ['git', 'clone', '/'.join([url, org, 'dotfiles']) + '.git'],
-        cwd=tempdir
-    )
+    clone_url = '/'.join([url, org, 'dotfiles']) + '.git'
+    print('Cloning: {}'.format(clone_url))
+    try:
+        subprocess.check_call(
+            ['git', 'clone', clone_url],
+            cwd=tempdir
+        )
+        return True
+    except subprocess.CalledProcessError:
+        return False
 
 
 def lint(data):
