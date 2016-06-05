@@ -16,6 +16,13 @@ from flask import Flask, request, redirect
 app = Flask(__name__)
 
 
+def clone_dotfiles(url, org, tempdir):
+    return subprocess.call(
+        ['git', 'clone', '/'.join([url, org, 'dotfiles']) + '.git'],
+        cwd=tempdir
+    )
+
+
 def lint(data):
     try:
         pull_request = data['pull_request']['number']
@@ -28,6 +35,7 @@ def lint(data):
         sha = data['pull_request']['head']['sha']
         pull_request_slug = data['pull_request']['head']['repo']['full_name']
         clone_url = data['pull_request']['head']['repo']['clone_url']
+        org = data['repository']['owner']['login']
     except KeyError:
         traceback.print_exc()
         return 'Invalid pull request data.'
@@ -43,8 +51,9 @@ def lint(data):
     if event_type not in ['opened', 'synchronize']:
         return
 
-    # make temp dir
+    # make temp dirs
     tempdir = tempfile.mkdtemp()
+    dotfile_dir = tempfile.mkdtemp()
     time.sleep(1)
 
     try:
@@ -62,25 +71,30 @@ def lint(data):
         )
         time.sleep(1)
 
+        args = [
+            'inline-plz',
+            '--autorun',
+            '--repo-slug={}'.format(repo_slug),
+            '--pull-request={}'.format(pull_request),
+            # '--url={}'.format(url),
+            '--token={}'.format(token),
+            '--interface={}'.format(interface),
+            '--zero-exit'
+        ]
+
+        if clone_dotfiles(url, org, dotfile_dir):
+            args.append('--config-dir={}'.format(dotfile_dir))
+        time.sleep(1)
+
         # run inline-plz in temp dir
-        subprocess.check_call(
-            [
-                'inline-plz',
-                '--autorun',
-                '--repo-slug={}'.format(repo_slug),
-                '--pull-request={}'.format(pull_request),
-                # '--url={}'.format(url),
-                '--token={}'.format(token),
-                '--interface={}'.format(interface),
-                '--zero-exit'
-            ],
-            cwd=os.path.join(tempdir, name)
-        )
+        print('Args: {}'.format(args))
+        subprocess.check_call(args, cwd=os.path.join(tempdir, name))
         time.sleep(1)
     finally:
         # delete temp dir
         time.sleep(1)
         shutil.rmtree(tempdir)
+        shutil.rmtree(dotfile_dir)
 
 
 @app.route('/', methods=['GET', 'POST'])
