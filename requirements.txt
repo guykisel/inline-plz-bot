@@ -1,6 +1,6 @@
 Flask>=0.10.1
 github3.py>=0.9.5
-inlineplz>=0.15.0
+inlineplz>=0.16.0
 itsdangerous>=0.24
 Jinja2>=2.8
 MarkupSafe>=0.23
