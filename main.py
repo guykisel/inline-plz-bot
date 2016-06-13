@@ -15,6 +15,10 @@ from flask import Flask, request, redirect
 
 app = Flask(__name__)
 
+SAFE_ENV = os.environ.copy()
+# wipe our token before passing our envvars into inline-plz
+SAFE_ENV['TOKEN'] = ''
+
 
 def clone_dotfiles(url, org, tempdir):
     clone_url = '/'.join([url, org, 'dotfiles']) + '.git'
@@ -22,7 +26,7 @@ def clone_dotfiles(url, org, tempdir):
     try:
         subprocess.check_call(
             ['git', 'clone', clone_url],
-            cwd=tempdir
+            cwd=tempdir, env=SAFE_ENV
         )
         return True
     except subprocess.CalledProcessError:
@@ -39,7 +43,6 @@ def lint(data):
         url = os.environ.get('URL', 'https://github.com')
         event_type = data['action']
         sha = data['pull_request']['head']['sha']
-        pull_request_slug = data['pull_request']['head']['repo']['full_name']
         clone_url = data['pull_request']['head']['repo']['clone_url']
         org = data['repository']['owner']['login']
     except KeyError:
@@ -66,14 +69,14 @@ def lint(data):
         # git clone into temp dir
         subprocess.check_call(
             ['git', 'clone', clone_url],
-            cwd=tempdir
+            cwd=tempdir, env=SAFE_ENV
         )
         time.sleep(1)
 
         # git checkout our sha
         subprocess.check_call(
             ['git', 'checkout', sha],
-            cwd=os.path.join(tempdir, name)
+            cwd=os.path.join(tempdir, name), env=SAFE_ENV
         )
         time.sleep(1)
 
@@ -82,7 +85,7 @@ def lint(data):
             '--autorun',
             '--repo-slug={}'.format(repo_slug),
             '--pull-request={}'.format(pull_request),
-            # '--url={}'.format(url),
+            '--url={}'.format(url),
             '--token={}'.format(token),
             '--interface={}'.format(interface),
             '--zero-exit'
@@ -96,13 +99,13 @@ def lint(data):
 
         # run inline-plz in temp dir
         print('Args: {}'.format(args))
-        subprocess.check_call(args, cwd=os.path.join(tempdir, name))
+        subprocess.check_call(args, cwd=os.path.join(tempdir, name), env=SAFE_ENV)
         time.sleep(1)
     finally:
         # delete temp dir
         time.sleep(1)
-        shutil.rmtree(tempdir)
-        shutil.rmtree(dotfile_dir)
+        shutil.rmtree(tempdir, ignore_errors=True)
+        shutil.rmtree(dotfile_dir, ignore_errors=True)
 
 
 @app.route('/', methods=['GET', 'POST'])
