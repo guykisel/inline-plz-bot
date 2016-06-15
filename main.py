@@ -26,11 +26,11 @@ def clone_dotfiles(url, org, tempdir, token):
     url = url.replace('https://', 'https://{}@'.format(token))
     clone_url = '/'.join([url, org, DOTFILES]) + '.git'
     print('Cloning: {}'.format(clone_url))
+    dotfile_path = os.path.join(tempdir, DOTFILES)
     try:
-        os.makedirs(DOTFILES)
+        os.makedirs(dotfile_path)
     except OSError:
         pass
-    dotfile_path = os.path.join(tempdir, DOTFILES)
     try:
         subprocess.check_call(
             ['git', 'init'],
