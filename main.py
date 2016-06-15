@@ -18,15 +18,27 @@ app = Flask(__name__)
 SAFE_ENV = os.environ.copy()
 # wipe our token before passing our envvars into inline-plz
 SAFE_ENV['TOKEN'] = ''
+DOTFILES = 'dotfiles'
 
 
-def clone_dotfiles(url, org, tempdir):
-    clone_url = '/'.join([url, org, 'dotfiles']) + '.git'
+def clone_dotfiles(url, org, tempdir, token):
+    # https://github.com/blog/1270-easier-builds-and-deployments-using-git-over-https-and-oauth
+    url = url.replace('https://', 'https://{}@'.format(token))
+    clone_url = '/'.join([url, org, DOTFILES]) + '.git'
     print('Cloning: {}'.format(clone_url))
     try:
+        os.makedirs(DOTFILES)
+    except OSError:
+        pass
+    dotfile_path = os.path.join(tempdir, DOTFILES)
+    try:
         subprocess.check_call(
-            ['git', 'clone', clone_url],
-            cwd=tempdir, env=SAFE_ENV
+            ['git', 'init'],
+            cwd=dotfile_path, env=SAFE_ENV
+        )
+        subprocess.check_call(
+            ['git', 'pull', clone_url],
+            cwd=dotfile_path, env=SAFE_ENV
         )
         return True
     except subprocess.CalledProcessError:
@@ -91,7 +103,7 @@ def lint(data):
             '--zero-exit'
         ]
 
-        if clone_dotfiles(url, org, dotfile_dir):
+        if clone_dotfiles(url, org, dotfile_dir, token):
             args.append('--config-dir={}'.format(
                 os.path.join(dotfile_dir, 'dotfiles')
             ))
