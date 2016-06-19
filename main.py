@@ -21,28 +21,38 @@ SAFE_ENV['TOKEN'] = ''
 DOTFILES = 'dotfiles'
 
 
-def clone_dotfiles(url, org, tempdir, token):
+def clone(url, dir, token, ref=None):
     # https://github.com/blog/1270-easier-builds-and-deployments-using-git-over-https-and-oauth
     url = url.replace('https://', 'https://{}@'.format(token))
-    clone_url = '/'.join([url, org, DOTFILES]) + '.git'
-    print('Cloning: {}'.format(clone_url))
-    dotfile_path = os.path.join(tempdir, DOTFILES)
+    print('Cloning: {}'.format(url))
     try:
-        os.makedirs(dotfile_path)
+        os.makedirs(dir)
     except OSError:
         pass
     try:
         subprocess.check_call(
             ['git', 'init'],
-            cwd=dotfile_path, env=SAFE_ENV
+            cwd=dir, env=SAFE_ENV
         )
+
+        pull_cmd = ['git', 'pull', url]
+        if ref:
+            pull_cmd.append(ref)
         subprocess.check_call(
-            ['git', 'pull', clone_url],
-            cwd=dotfile_path, env=SAFE_ENV
+            pull_cmd,
+            cwd=dir, env=SAFE_ENV
         )
         return True
     except subprocess.CalledProcessError:
         return False
+
+
+def clone_dotfiles(url, org, tempdir, token):
+    # https://github.com/blog/1270-easier-builds-and-deployments-using-git-over-https-and-oauth
+    clone_url = '/'.join([url, org, DOTFILES]) + '.git'
+    print('Cloning: {}'.format(clone_url))
+    dotfile_path = os.path.join(tempdir, DOTFILES)
+    return clone(clone_url, dotfile_path, token)
 
 
 def lint(data):
@@ -55,6 +65,7 @@ def lint(data):
         url = os.environ.get('URL', 'https://github.com')
         event_type = data['action']
         sha = data['pull_request']['head']['sha']
+        ref = data['pull_request']['head']['ref']
         clone_url = data['pull_request']['head']['repo']['clone_url']
         org = data['repository']['owner']['login']
     except KeyError:
@@ -80,10 +91,7 @@ def lint(data):
 
     try:
         # git clone into temp dir
-        subprocess.check_call(
-            ['git', 'clone', clone_url],
-            cwd=tempdir, env=SAFE_ENV
-        )
+        clone(clone_url, os.path.join(tempdir, name), token, ref)
         time.sleep(1)
 
         # git checkout our sha
