@@ -60,6 +60,7 @@ def lint(data):
     except KeyError:
         traceback.print_exc()
         return 'Invalid pull request data.'
+    trusted = os.environ.get('TRUSTED', '').lower().strip() in ['true', 'yes', '1']
 
     print('Starting inline-plz:')
     print('Event: {}'.format(event_type))
@@ -102,7 +103,8 @@ def lint(data):
             '--interface={}'.format(interface),
             '--zero-exit'
         ]
-
+        if trusted:
+            args.append('--trusted')
         if clone_dotfiles(url, org, dotfile_dir, token):
             args.append('--config-dir={}'.format(
                 os.path.join(dotfile_dir, 'dotfiles')
