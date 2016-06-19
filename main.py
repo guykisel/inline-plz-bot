@@ -21,6 +21,12 @@ SAFE_ENV['TOKEN'] = ''
 DOTFILES = 'dotfiles'
 
 
+@app.errorhandler(Exception)
+def all_exception_handler():
+    """Catch, print, then ignore all errors."""
+    traceback.print_exc()
+
+
 def clone(url, dir, token, ref=None):
     # https://github.com/blog/1270-easier-builds-and-deployments-using-git-over-https-and-oauth
     url = url.replace('https://', 'https://{}@'.format(token))
