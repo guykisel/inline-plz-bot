@@ -33,7 +33,7 @@ pylint-flask==0.3
 pylint-plugin-utils==0.2.4
 pylint==1.6.4
 PyYAML==3.11              # via inlineplz, prospector
-requests==2.10.0
+requests==2.11.0
 requirements-detector==0.5.1
 restructuredtext-lint==0.17.0
 scandir==1.2
