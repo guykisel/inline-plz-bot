@@ -33,14 +33,14 @@ pylint-flask==0.3
 pylint-plugin-utils==0.2.4
 pylint==1.6.4
 PyYAML==3.11              # via inlineplz, prospector
-requests==2.11.0
-requirements-detector==0.5.1
+requests==2.11.1
+requirements-detector==0.5.2
 restructuredtext-lint==0.17.0
 scandir==1.2
 setoptconf==0.2.0
 six==1.10.0
 unidiff==0.5.2
-uritemplate.py==0.3.0
+uritemplate.py==2.0.0
 Werkzeug==0.11.10         # via flask
 wrapt==1.10.8
 xmltodict==0.10.2
