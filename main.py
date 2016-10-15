@@ -19,6 +19,8 @@ SAFE_ENV = os.environ.copy()
 # wipe our token before passing our envvars into inline-plz
 SAFE_ENV['TOKEN'] = ''
 DOTFILES = 'dotfiles'
+STOP_FILE_NAME = '.inlineplzstop'
+REVIEWS_IN_PROGRESS = dict()
 
 
 @app.errorhandler(Exception)
@@ -95,6 +97,17 @@ def lint(data):
     dotfile_dir = tempfile.mkdtemp()
     time.sleep(1)
 
+    # check for existing runs against this PR
+    pr_name = '{}-{}'.format(repo_slug, pull_request)
+    REVIEWS_IN_PROGRESS.setdefault(pr_name, set())
+    for dir in REVIEWS_IN_PROGRESS[pr_name]:
+        stopfile_path = os.path.join(dir, STOP_FILE_NAME)
+        try:
+            open(stopfile_path, 'w').close()
+        except (IOError, OSError):
+            pass
+    REVIEWS_IN_PROGRESS[pr_name].add(tempdir)
+
     try:
         # git clone into temp dir
         clone(clone_url, os.path.join(tempdir, name), token, ref)
@@ -134,6 +147,7 @@ def lint(data):
         time.sleep(1)
         shutil.rmtree(tempdir, ignore_errors=True)
         shutil.rmtree(dotfile_dir, ignore_errors=True)
+        REVIEWS_IN_PROGRESS[pr_name].discard(tempdir)
 
 
 @app.route('/', methods=['GET', 'POST'])
