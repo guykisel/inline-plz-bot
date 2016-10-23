@@ -4,8 +4,6 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import logging
-import logging.handlers
 import os
 import shutil
 import subprocess
@@ -13,26 +11,9 @@ import tempfile
 import threading
 import time
 import traceback
-from capturer import CaptureOutput
 from flask import Flask, request, redirect
 
 app = Flask(__name__)
-
-# logging setup
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-rh = logging.handlers.RotatingFileHandler(
-    os.path.join(os.path.expanduser('~'),
-                 'inline-plz-bot.log',
-                 maxBytes=1024 * 1024,
-                 backupCount=5)
-)
-ch = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-rh.setFormatter(formatter)
-ch.setFormatter(formatter)
-logger.addHandler(rh)
-logger.addHandler(ch)
 
 SAFE_ENV = os.environ.copy()
 # wipe our token before passing our envvars into inline-plz
@@ -51,7 +32,7 @@ def all_exception_handler():
 def clone(url, dir, token, ref=None):
     # https://github.com/blog/1270-easier-builds-and-deployments-using-git-over-https-and-oauth
     url = url.replace('https://', 'https://{}@'.format(token))
-    logger.info('Cloning: {}'.format(url))
+    print('Cloning: {}'.format(url))
     try:
         os.makedirs(dir)
     except OSError:
@@ -77,7 +58,7 @@ def clone(url, dir, token, ref=None):
 def clone_dotfiles(url, org, tempdir, token):
     # https://github.com/blog/1270-easier-builds-and-deployments-using-git-over-https-and-oauth
     clone_url = '/'.join([url, org, DOTFILES]) + '.git'
-    logger.info('Cloning: {}'.format(clone_url))
+    print('Cloning: {}'.format(clone_url))
     dotfile_path = os.path.join(tempdir, DOTFILES)
     return clone(clone_url, dotfile_path, token)
 
@@ -96,17 +77,17 @@ def lint(data):
         clone_url = data['pull_request']['head']['repo']['clone_url']
         org = data['repository']['owner']['login']
     except KeyError:
-        logger.exception('Invalid pull request data.')
+        traceback.print_exc()
         return 'Invalid pull request data.'
     trusted = os.environ.get('TRUSTED', '').lower().strip() in ['true', 'yes', '1']
 
-    logger.info('Starting inline-plz:')
-    logger.info('Event: {}'.format(event_type))
-    logger.info('PR: {}'.format(pull_request))
-    logger.info('Repo slug: {}'.format(repo_slug))
-    logger.info('Name: {}'.format(name))
-    logger.info('SHA: {}'.format(sha))
-    logger.info('Clone URL: {}'.format(clone_url))
+    print('Starting inline-plz:')
+    print('Event: {}'.format(event_type))
+    print('PR: {}'.format(pull_request))
+    print('Repo slug: {}'.format(repo_slug))
+    print('Name: {}'.format(name))
+    print('SHA: {}'.format(sha))
+    print('Clone URL: {}'.format(clone_url))
 
     if event_type not in ['opened', 'synchronize']:
         return
@@ -158,16 +139,8 @@ def lint(data):
         time.sleep(1)
 
         # run inline-plz in temp dir
-        logger.info('Args: {}'.format(args))
-        with CaptureOutput() as capturer:
-            try:
-                subprocess.check_call(args, cwd=os.path.join(tempdir, name), env=SAFE_ENV)
-                for line in capturer.get_lines():
-                    logger.info(line)
-            except subprocess.CalledProcessError:
-                for line in capturer.get_lines():
-                    logger.error(line)
-                raise
+        print('Args: {}'.format(args))
+        subprocess.check_call(args, cwd=os.path.join(tempdir, name), env=SAFE_ENV)
         time.sleep(1)
     finally:
         # delete temp dir
