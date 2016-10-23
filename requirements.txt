@@ -4,8 +4,10 @@
 #
 #    pip-compile --output-file requirements.txt requirements.txt
 #
+
 astroid==1.4.8
 backports.functools-lru-cache==1.2.1
+capturer==2.2
 click==6.6
 colorama==0.3.7
 configparser==3.5.0
@@ -13,6 +15,7 @@ docutils==0.12
 dodgy==0.1.9
 Flask==0.11.1
 github3.py==0.9.5
+humanfriendly==2.1        # via capturer
 inlineplz==0.23.0
 isort==4.2.5
 itsdangerous==0.24
@@ -24,7 +27,7 @@ mccabe==0.5.2
 pep8-naming==0.4.1
 pep8==1.7.0
 prospector==0.12.2
-pycodestyle==2.0.0        # via prospector
+pycodestyle==2.0.0
 pydocstyle==1.0.0
 pyflakes==1.2.3
 pylint-celery==0.3
