@@ -11,7 +11,7 @@ colorama==0.3.7
 configparser==3.5.0
 docutils==0.13.1
 dodgy==0.1.9
-Flask==0.11.1
+Flask==0.12
 github3.py==0.9.6
 inlineplz==0.23.1
 isort==4.2.5
@@ -42,7 +42,7 @@ setoptconf==0.2.0
 six==1.10.0
 unidiff==0.5.2
 uritemplate.py==3.0.2
-Werkzeug==0.11.11         # via flask
+Werkzeug==0.11.12         # via flask
 wrapt==1.10.8
 xmltodict==0.10.2
 
