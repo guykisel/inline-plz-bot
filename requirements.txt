@@ -20,7 +20,7 @@ Jinja2==2.9.4               # via flask
 lazy-object-proxy==1.2.2
 logilab-common==1.3.0
 MarkupSafe==0.23          # via jinja2
-mccabe==0.5.3
+mccabe==0.6.1
 pep8-naming==0.4.1
 pep8==1.7.0
 prospector==0.12.4
@@ -32,9 +32,9 @@ pylint-common==0.2.2
 pylint-django==0.7.2
 pylint-flask==0.5
 pylint-plugin-utils==0.2.4
-pylint==1.6.4
+pylint==1.6.5
 PyYAML==3.12              # via inlineplz, prospector
-requests==2.12.5
+requests==2.13.0
 requirements-detector==0.5.2
 restructuredtext-lint==0.17.2
 scandir==1.4
