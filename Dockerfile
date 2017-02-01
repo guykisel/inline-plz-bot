@@ -4,6 +4,6 @@ RUN apt-get update && apt-get install -y ruby-full haskell-platform shellcheck n
 
 RUN pip install -U pip
 
-COPY * /app/
+COPY ./app /app
 
 RUN pip install -r /app/requirements.txt
