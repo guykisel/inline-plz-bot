@@ -66,9 +66,12 @@ def clone_dotfiles(url, org, tempdir, token):
 
 def ssh_keygen(url):
     with SSH_LOCK:
-        output = subprocess.check_output(['ssh-keygen', '-F', url])
-        if output.strip():
-            return
+        try:
+            output = subprocess.check_output(['ssh-keygen', '-F', url], stderr=subprocess.STDOUT)
+            if output.strip():
+                return
+        except subprocess.CalledProcessError:
+            pass
         subprocess.check_call(['ssh-keyscan', '-t', 'rsa', url, '>>', '~/.ssh/known_hosts'])
 
 
