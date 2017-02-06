@@ -73,7 +73,7 @@ def ssh_keygen(url):
         except subprocess.CalledProcessError:
             traceback.print_exc()
         try:
-            output = subprocess.check_call(['ssh-keyscan', '-t', 'rsa', url], stderr=subprocess.STDOUT)
+            output = subprocess.check_output(['ssh-keyscan', '-t', 'rsa', url], stderr=subprocess.STDOUT)
             with open(os.path.join(os.path.expanduser('~'), '.ssh', 'known_hosts'), 'a') as known_hosts:
                 known_hosts.write(output)
         except Exception:
