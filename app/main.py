@@ -21,6 +21,7 @@ SAFE_ENV['TOKEN'] = ''
 DOTFILES = 'dotfiles'
 STOP_FILE_NAME = '.inlineplzstop'
 REVIEWS_IN_PROGRESS = dict()
+SSH_LOCK = threading.Lock()
 
 
 @app.errorhandler(Exception)
@@ -63,6 +64,14 @@ def clone_dotfiles(url, org, tempdir, token):
     return clone(clone_url, dotfile_path, token)
 
 
+def ssh_keygen(url):
+    with SSH_LOCK:
+        output = subprocess.check_output(['ssh-keygen', '-F', url])
+        if output.strip():
+            return
+        subprocess.check_call(['ssh-keyscan', '-t', 'rsa', url, '>>', '~/.ssh/known_hosts'])
+
+
 def lint(data):
     try:
         pull_request = data['pull_request']['number']
@@ -70,7 +79,7 @@ def lint(data):
         name = data['repository']['name']
         token = os.environ.get('TOKEN')
         interface = 'github'
-        url = os.environ.get('URL', 'https://github.com')
+        url = data['repository']['ssh_url'].split('@')[1].split(':')[0]
         event_type = data['action']
         sha = data['pull_request']['head']['sha']
         ref = data['pull_request']['head']['ref']
@@ -91,6 +100,8 @@ def lint(data):
 
     if event_type not in ['opened', 'synchronize']:
         return
+
+    ssh_keygen(url)
 
     # make temp dirs
     tempdir = tempfile.mkdtemp()
