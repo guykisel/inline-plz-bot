@@ -47,3 +47,8 @@ RUN curl -L https://get.rvm.io | bash -s stable
 RUN bash -l -c "rvm requirements"
 RUN bash -l -c "rvm install 2.0"
 RUN bash -l -c "gem install bundler --no-ri --no-rdoc"
+
+RUN mkdir -p /root/.ssh
+RUN touch /root/.ssh/known_hosts
+RUN chmod 0700 /root/.ssh
+RUN chmod 0600 /root/.ssh/known_hosts
