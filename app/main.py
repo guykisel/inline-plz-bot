@@ -71,8 +71,13 @@ def ssh_keygen(url):
             if output.strip():
                 return
         except subprocess.CalledProcessError:
-            pass
-        subprocess.check_call(['ssh-keyscan', '-t', 'rsa', url, '>>', '~/.ssh/known_hosts'])
+            traceback.print_exc()
+        try:
+            output = subprocess.check_call(['ssh-keyscan', '-t', 'rsa', url])
+            with open(os.path.join(os.path.expanduser('~'), '.ssh', 'known_hosts'), 'a') as known_hosts:
+                known_hosts.write(output)
+        except Exception:
+            traceback.print_exc()
 
 
 def lint(data):
