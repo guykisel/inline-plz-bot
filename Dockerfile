@@ -35,16 +35,15 @@ RUN eval "$(pyenv virtualenv-init -)"
 RUN pyenv update
 RUN pyenv install 2.7.13
 RUN pyenv install 3.6.0
+RUN pyenv global 2.7.13 3.6.0
 COPY ./app /app
 COPY requirements.txt /app
 RUN pip install -r /app/requirements.txt
 
 # Install rvm (https://github.com/vallard/docker/blob/master/rails/Dockerfile)
 RUN apt-get install -y curl patch gawk g++ gcc make libc6-dev patch libreadline6-dev zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 autoconf libgdbm-dev libncurses5-dev automake libtool bison pkg-config libffi-dev
-RUN useradd -ms /bin/bash app
-USER app
 RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-RUN /bin/bash -l -c "curl -L get.rvm.io | bash -s stable --rails"
-RUN /bin/bash -l -c "rvm install 2.1"
-RUN /bin/bash -l -c "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
-RUN /bin/bash -l -c "gem install bundler --no-ri --no-rdoc"
+RUN curl -L https://get.rvm.io | bash -s stable
+RUN bash -l -c "rvm requirements"
+RUN bash -l -c "rvm install 2.0"
+RUN bash -l -c "gem install bundler --no-ri --no-rdoc"
