@@ -33,7 +33,7 @@ def ssh_keygen():
     time.sleep(random.randint(1, 10))
     while not os.path.exists(SSH_FILE_PATH):
         try:
-            subprocess.check_call(['ssh-keygen', '-t', 'rsa', '-b', '2048', '-f', SSH_FILE_PATH, '-q', '-N', '""'])
+            subprocess.check_call(['ssh-keygen', '-t', 'rsa', '-b', '2048', '-f', SSH_FILE_PATH, '-q', '-N', ''])
         except Exception:
             traceback.print_exc()
             time.sleep(random.randint(1, 10))
