@@ -2,7 +2,7 @@ FROM tiangolo/uwsgi-nginx-flask:flask
 
 RUN apt-get update && apt-get upgrade --fix-missing -y
 RUN apt-get update && apt-get install -y curl git bzr mercurial build-essential
-RUN apt-get install -y zip ruby-full haskell-platform shellcheck
+RUN apt-get install -y zip ruby-full haskell-platform shellcheck ssh
 RUN apt-get install -y python-pip python-dev
 RUN apt-get install -y nodejs build-essential golang
 

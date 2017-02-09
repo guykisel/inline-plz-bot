@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 import hashlib
 import os
 import random
+import re
 import shutil
 import subprocess
 import tempfile
@@ -34,6 +35,14 @@ def ssh_keygen():
     while not os.path.exists(SSH_FILE_PATH):
         try:
             subprocess.check_call(['ssh-keygen', '-t', 'rsa', '-b', '2048', '-f', SSH_FILE_PATH, '-q', '-N', ''])
+            ssh_output = subprocess.check_output('ssh-agent -s', shell=True, stderr=subprocess.STDOUT)
+            # http://code.activestate.com/recipes/533143-set-environment-variables-for-using-ssh-in-python-/
+            for sh_line in ssh_output.splitlines():
+                matches=re.search("(\S+)\=(\S+)\;", sh_line)
+                if matches:
+                    os.environ[matches.group(1)]=matches.group(2)
+                    SAFE_ENV[matches.group(1)]=matches.group(2)
+            subprocess.check_call('ssh-add {}'.format(SSH_FILE_PATH), shell=True)
         except Exception:
             traceback.print_exc()
             time.sleep(random.randint(1, 10))
@@ -90,6 +99,13 @@ def clone_dotfiles(url, org, tempdir, token):
 
 def ssh_setup(url, token):
     with SSH_LOCK:
+        try:
+            with open(os.path.join(os.path.expanduser('~'), '.ssh', 'config'), 'ar+') as sshconfig:
+                contents = sshconfig.read()
+                if not 'HostName {}'.format(url) in contents:
+                    sshconfig.write('\nHost {0}\n\tHostName {0}\n\tIdentityFile {1}'.format(url, SSH_FILE_PATH))
+        except Exception:
+            traceback.print_exc()
         if not url or url in ['http://github.com', 'https://github.com']:
             github = github3.GitHub(token=token)
         else:
@@ -102,7 +118,7 @@ def ssh_setup(url, token):
             elif key.title == '{}_{}'.format(SSH_FILE_NAME, SSH_KEY_HASH):
                 key_found = True
         if not key_found:
-            github.create_key('{}_{}'.format(SSH_FILE_NAME, SSH_KEY_HASH), SSH_FILE_PATH + '.pub')
+            github.create_key('{}_{}'.format(SSH_FILE_NAME, SSH_KEY_HASH), open(SSH_FILE_PATH + '.pub').read())
 
         keygen_url = url.split('//')[-1]
         try:
