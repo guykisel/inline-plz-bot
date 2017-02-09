@@ -33,7 +33,7 @@ def ssh_keygen():
     time.sleep(random.randint(1, 10))
     while not os.path.exists(SSH_FILE_PATH):
         try:
-            subprocess.check_call(['ssh-keygen', '-t', 'rsa', '-b', '2048', '-f', SSH_FILE_PATH])
+            subprocess.check_call(['ssh-keygen', '-t', 'rsa', '-b', '2048', '-f', SSH_FILE_PATH, '-q', '-N', '""'])
         except Exception:
             traceback.print_exc()
             time.sleep(random.randint(1, 10))
@@ -126,7 +126,7 @@ def lint(data):
         name = data['repository']['name']
         token = os.environ.get('TOKEN')
         interface = 'github'
-        url = data['repository']['ssh_url'].split('@')[1].split(':')[0]
+        url = 'https://' + data['repository']['ssh_url'].split('@')[1].split(':')[0]
         event_type = data['action']
         sha = data['pull_request']['head']['sha']
         ref = data['pull_request']['head']['ref']
