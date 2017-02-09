@@ -4,7 +4,9 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import hashlib
 import os
+import random
 import shutil
 import subprocess
 import tempfile
@@ -12,6 +14,7 @@ import threading
 import time
 import traceback
 from flask import Flask, request, redirect
+import github3
 
 app = Flask(__name__)
 
@@ -20,8 +23,18 @@ SAFE_ENV = os.environ.copy()
 SAFE_ENV['TOKEN'] = ''
 DOTFILES = 'dotfiles'
 STOP_FILE_NAME = '.inlineplzstop'
+SSH_FILE_NAME = 'inline_plz_rsa'
+SSH_FILE_PATH = os.path.join(os.path.expanduser('~'), '.ssh', SSH_FILE_NAME)
 REVIEWS_IN_PROGRESS = dict()
 SSH_LOCK = threading.Lock()
+
+TRUSTED = os.environ.get('TRUSTED', '').lower().strip() in ['true', 'yes', '1']
+if TRUSTED:
+    ssh_keygen()
+
+SSH_KEY_HASH = hashlib.md5()
+SSH_KEY_HASH.update(open(SSH_FILE_PATH).read())
+SSH_KEY_HASH = SSH_KEY_HASH.hexdigest()[-6:]
 
 
 @app.errorhandler(Exception)
@@ -64,16 +77,41 @@ def clone_dotfiles(url, org, tempdir, token):
     return clone(clone_url, dotfile_path, token)
 
 
-def ssh_keygen(url):
-    with SSH_LOCK:
+def ssh_keygen():
+    time.sleep(random.randint(1, 10))
+    while not os.path.exists(SSH_FILE_PATH):
         try:
-            output = subprocess.check_output(['ssh-keygen', '-F', url], stderr=subprocess.STDOUT)
+            subprocess.check_call(['ssh-keygen', '-t', 'rsa', '-b', '2048', '-f', SSH_FILE_PATH])
+        except Exception:
+            traceback.print_exc()
+            time.sleep(random.randint(1, 10))
+
+
+def ssh_setup(url, token):
+    with SSH_LOCK:
+        if not url or url in ['http://github.com', 'https://github.com']:
+            github = github3.GitHub(token=token)
+        else:
+            github = github3.GitHubEnterprise(url, token=token)
+
+        key_found = False
+        for key in github.iter_keys():
+            if SSH_FILE_NAME in key.title and not SSH_KEY_HASH in key.title:
+                github.delete_key(key.id)
+            elif key.title == '{}_{}'.format(SSH_FILE_NAME, SSH_KEY_HASH):
+                key_found = True
+        if not key_found:
+            github.create_key('{}_{}'.format(SSH_FILE_NAME, SSH_KEY_HASH), SSH_FILE_PATH + '.pub')
+
+        keygen_url = url.split('//')[-1]
+        try:
+            output = subprocess.check_output(['ssh-keygen', '-F', keygen_url], stderr=subprocess.STDOUT)
             if output.strip():
                 return
         except subprocess.CalledProcessError:
             traceback.print_exc()
         try:
-            output = subprocess.check_output(['ssh-keyscan', '-t', 'rsa', url], stderr=subprocess.STDOUT)
+            output = subprocess.check_output(['ssh-keyscan', '-t', 'rsa', keygen_url], stderr=subprocess.STDOUT)
             with open(os.path.join(os.path.expanduser('~'), '.ssh', 'known_hosts'), 'a') as known_hosts:
                 known_hosts.write(output)
         except Exception:
@@ -96,7 +134,7 @@ def lint(data):
     except KeyError:
         traceback.print_exc()
         return 'Invalid pull request data.'
-    trusted = os.environ.get('TRUSTED', '').lower().strip() in ['true', 'yes', '1']
+
 
     print('Starting inline-plz:')
     print('Event: {}'.format(event_type))
@@ -109,7 +147,8 @@ def lint(data):
     if event_type not in ['opened', 'synchronize']:
         return
 
-    ssh_keygen(url)
+    if TRUSTED:
+        ssh_setup(url, token)
 
     # make temp dirs
     tempdir = tempfile.mkdtemp()
@@ -149,7 +188,7 @@ def lint(data):
             '--interface={}'.format(interface),
             '--zero-exit'
         ]
-        if trusted:
+        if TRUSTED:
             args.append('--trusted')
         if clone_dotfiles(url, org, dotfile_dir, token):
             args.append('--config-dir={}'.format(
