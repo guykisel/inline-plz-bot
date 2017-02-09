@@ -28,6 +28,17 @@ SSH_FILE_PATH = os.path.join(os.path.expanduser('~'), '.ssh', SSH_FILE_NAME)
 REVIEWS_IN_PROGRESS = dict()
 SSH_LOCK = threading.Lock()
 
+
+def ssh_keygen():
+    time.sleep(random.randint(1, 10))
+    while not os.path.exists(SSH_FILE_PATH):
+        try:
+            subprocess.check_call(['ssh-keygen', '-t', 'rsa', '-b', '2048', '-f', SSH_FILE_PATH])
+        except Exception:
+            traceback.print_exc()
+            time.sleep(random.randint(1, 10))
+
+
 TRUSTED = os.environ.get('TRUSTED', '').lower().strip() in ['true', 'yes', '1']
 if TRUSTED:
     ssh_keygen()
@@ -75,16 +86,6 @@ def clone_dotfiles(url, org, tempdir, token):
     print('Cloning: {}'.format(clone_url))
     dotfile_path = os.path.join(tempdir, DOTFILES)
     return clone(clone_url, dotfile_path, token)
-
-
-def ssh_keygen():
-    time.sleep(random.randint(1, 10))
-    while not os.path.exists(SSH_FILE_PATH):
-        try:
-            subprocess.check_call(['ssh-keygen', '-t', 'rsa', '-b', '2048', '-f', SSH_FILE_PATH])
-        except Exception:
-            traceback.print_exc()
-            time.sleep(random.randint(1, 10))
 
 
 def ssh_setup(url, token):
