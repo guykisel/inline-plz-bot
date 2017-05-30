@@ -23,7 +23,7 @@ MarkupSafe==1.0          # via jinja2
 mccabe==0.6.1
 pep8-naming==0.4.1
 pep8==1.7.0
-prospector==0.12.5
+prospector==0.12.6
 pycodestyle==2.3.1        # via prospector
 pydocstyle==2.0.0
 pyflakes==1.5.0
@@ -34,13 +34,13 @@ pylint-flask==0.5
 pylint-plugin-utils==0.2.6
 pylint==1.7.1
 PyYAML==3.12              # via inlineplz, prospector
-requests==2.14.2
+requests==2.17.3
 requirements-detector==0.5.2
 restructuredtext-lint==1.0.1
 scandir==1.5
 setoptconf==0.2.0
 six==1.10.0
-unidiff==0.5.3
+unidiff==0.5.4
 uritemplate.py==3.0.2
 Werkzeug==0.12.2         # via flask
 wrapt==1.10.10
