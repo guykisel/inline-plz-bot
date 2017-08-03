@@ -9,7 +9,7 @@ backports.functools-lru-cache==1.4
 click==6.7
 colorama==0.3.9
 configparser==3.5.0
-docutils==0.13.1
+docutils==0.14
 dodgy==0.1.9
 Flask==0.12.2
 github3.py==0.9.6
@@ -34,7 +34,7 @@ pylint-flask==0.5
 pylint-plugin-utils==0.2.6
 pylint==1.7.2
 PyYAML==3.12              # via inlineplz, prospector
-requests==2.18.2
+requests==2.18.3
 requirements-detector==0.5.2
 restructuredtext-lint==1.1.1
 scandir==1.5
