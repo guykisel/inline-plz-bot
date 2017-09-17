@@ -39,7 +39,7 @@ requirements-detector==0.5.2
 restructuredtext-lint==1.1.1
 scandir==1.5
 setoptconf==0.2.0
-six==1.10.0
+six==1.11.0
 unidiff==0.5.4
 uritemplate.py==3.0.2
 Werkzeug==0.12.2         # via flask
