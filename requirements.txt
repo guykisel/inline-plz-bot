@@ -22,7 +22,7 @@ logilab-common==1.4.1
 MarkupSafe==1.0          # via jinja2
 mccabe==0.6.1
 pep8-naming==0.4.1
-pep8==1.7.0
+pep8==1.7.1
 prospector==0.12.7
 pycodestyle==2.3.1        # via prospector
 pydocstyle==2.1.1
