@@ -42,7 +42,7 @@ setoptconf==0.2.0
 six==1.11.0
 unidiff==0.5.4
 uritemplate.py==3.0.2
-Werkzeug==0.13         # via flask
+Werkzeug==0.14         # via flask
 wrapt==1.10.11
 xmltodict==0.11.0
 
