@@ -29,7 +29,7 @@ pydocstyle==2.1.1
 pyflakes==1.6.0
 pylint-celery==0.3
 pylint-common==0.2.5
-pylint-django==0.7.2
+pylint-django==0.8.0
 pylint-flask==0.5
 pylint-plugin-utils==0.2.6
 pylint==1.8.1
