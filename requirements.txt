@@ -13,7 +13,7 @@ docutils==0.14
 dodgy==0.1.9
 Flask==1.0.2
 github3.py==1.1.0
-inlineplz==0.37.4
+inlineplz==0.37.9
 isort==4.3.4
 itsdangerous==0.24
 Jinja2==2.10               # via flask
@@ -33,7 +33,7 @@ pylint-django==0.11.1
 pylint-flask==0.5
 pylint-plugin-utils==0.2.6
 pylint==1.9.2
-PyYAML==3.12              # via inlineplz, prospector
+PyYAML==4.1              # via inlineplz, prospector
 requests==2.19.1
 requirements-detector==0.5.2
 restructuredtext-lint==1.1.3
