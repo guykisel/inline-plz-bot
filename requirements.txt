@@ -23,16 +23,16 @@ MarkupSafe==1.0          # via jinja2
 mccabe==0.6.1
 pep8-naming==0.7.0
 pep8==1.7.1
-prospector==0.12.11
+prospector==1.1
 pycodestyle==2.4.0        # via prospector
 pydocstyle==2.1.1
 pyflakes==2.0.0
 pylint-celery==0.3
 pylint-common==0.2.5
-pylint-django==0.11.1
+pylint-django==2.0
 pylint-flask==0.5
 pylint-plugin-utils==0.4
-pylint==2.0.0
+pylint==2.0.1
 PyYAML==3.13              # via inlineplz, prospector
 requests==2.19.1
 requirements-detector==0.6
