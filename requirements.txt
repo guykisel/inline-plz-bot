@@ -6,14 +6,14 @@
 #
 astroid==2.0.4
 backports.functools-lru-cache==1.5
-click==6.7
+click==7.0
 colorama==0.3.9
 configparser==3.5.0
 docutils==0.14
 dodgy==0.1.9
 Flask==1.0.2
 github3.py==1.2.0
-inlineplz==0.40.0
+inlineplz==0.42.1
 isort==4.3.4
 itsdangerous==0.24
 Jinja2==2.10               # via flask
