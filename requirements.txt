@@ -7,7 +7,7 @@
 astroid==2.0.4
 backports.functools-lru-cache==1.5
 click==7.0
-colorama==0.4.0
+colorama==0.4.1
 configparser==3.5.0
 docutils==0.14
 dodgy==0.1.9
