@@ -36,7 +36,7 @@ pylint==2.2.2
 PyYAML==3.13              # via inlineplz, prospector
 requests==2.21.0
 requirements-detector==0.6
-restructuredtext-lint==1.2.1
+restructuredtext-lint==1.2.2
 scandir==1.9.0
 setoptconf==0.2.0
 six==1.12.0
