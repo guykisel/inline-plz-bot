@@ -24,7 +24,7 @@ mccabe==0.6.1
 pep8-naming==0.8.0
 pep8==1.7.1
 prospector==1.1.6.2
-pycodestyle==2.4.0        # via prospector
+pycodestyle==2.5.0        # via prospector
 pydocstyle==3.0.0
 pyflakes==2.1.0
 pylint-celery==0.3
