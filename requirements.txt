@@ -44,7 +44,7 @@ unidiff==0.5.5
 uritemplate.py==3.0.2
 Werkzeug==0.14.1         # via flask
 wrapt==1.11.1
-xmltodict==0.11.0
+xmltodict==0.12.0
 
 # The following packages are commented out because they are
 # considered to be unsafe in a requirements file:
