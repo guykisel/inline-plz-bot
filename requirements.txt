@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file requirements.txt requirements.txt
 #
-astroid==2.2.2
+astroid==2.2.3
 backports.functools-lru-cache==1.5
 click==7.0
 colorama==0.4.1
