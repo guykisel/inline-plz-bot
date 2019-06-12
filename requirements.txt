@@ -23,7 +23,7 @@ MarkupSafe==1.1.1          # via jinja2
 mccabe==0.6.1
 pep8-naming==0.8.2
 pep8==1.7.1
-prospector==1.1.6.2
+prospector==1.1.6.3
 pycodestyle==2.5.0        # via prospector
 pydocstyle==3.0.0
 pyflakes==2.1.1
