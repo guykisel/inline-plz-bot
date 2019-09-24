@@ -32,7 +32,7 @@ pylint-common==0.2.5
 pylint-django==2.0.11
 pylint-flask==0.6
 pylint-plugin-utils==0.5
-pylint==2.3.1
+pylint==2.4.0
 PyYAML==5.1.2              # via inlineplz, prospector
 requests==2.22.0
 requirements-detector==0.6
