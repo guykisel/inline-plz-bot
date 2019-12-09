@@ -25,7 +25,7 @@ pep8-naming==0.9.1
 pep8==1.7.1
 prospector==1.1.7
 pycodestyle==2.5.0        # via prospector
-pydocstyle==4.0.1
+pydocstyle==5.0.0
 pyflakes==2.1.1
 pylint-celery==0.3
 pylint-common==0.2.5
