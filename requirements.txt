@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file requirements.txt requirements.txt
 #
-astroid==2.4.1
+astroid==2.4.2
 backports.functools-lru-cache==1.6.1
 click==7.1.2
 colorama==0.4.3
@@ -32,7 +32,7 @@ pylint-common==0.2.5
 pylint-django==2.0.15
 pylint-flask==0.6
 pylint-plugin-utils==0.6
-pylint==2.5.2
+pylint==2.5.3
 PyYAML==5.3.1              # via inlineplz, prospector
 requests==2.23.0
 requirements-detector==0.7
