@@ -17,7 +17,7 @@ inlineplz==0.48.4
 isort==5.1.4
 itsdangerous==1.1.0
 Jinja2==2.11.2               # via flask
-lazy-object-proxy==1.5.0
+lazy-object-proxy==1.5.1
 logilab-common==1.7.2
 MarkupSafe==1.1.1          # via jinja2
 mccabe==0.6.1
