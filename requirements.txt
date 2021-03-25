@@ -33,7 +33,7 @@ pylint-django==0.7.2
 pylint-flask==0.3
 pylint-plugin-utils==0.2.4
 pylint==1.6.4
-PyYAML==3.11              # via inlineplz, prospector
+PyYAML==5.4              # via inlineplz, prospector
 requests==2.11.1
 requirements-detector==0.5.2
 restructuredtext-lint==0.17.0
