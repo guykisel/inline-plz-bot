@@ -9,7 +9,7 @@ backports.functools-lru-cache==1.6.4
 click==7.1.2
 colorama==0.4.4
 configparser==5.0.2
-docutils==0.17
+docutils==0.17.1
 dodgy==0.2.1
 Flask==1.1.2
 github3.py==2.0.0
