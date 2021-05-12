@@ -6,20 +6,20 @@
 #
 astroid==2.5.6
 backports.functools-lru-cache==1.6.4
-click==7.1.2
+click==8.0.0
 colorama==0.4.4
 configparser==5.0.2
 docutils==0.17.1
 dodgy==0.2.1
-Flask==1.1.2
+Flask==2.0.0
 github3.py==2.0.0
 inlineplz==0.48.4
 isort==5.8.0
-itsdangerous==1.1.0
-Jinja2==2.11.3               # via flask
+itsdangerous==2.0.0
+Jinja2==3.0.0               # via flask
 lazy-object-proxy==1.6.0
 logilab-common==1.8.1
-MarkupSafe==1.1.1          # via jinja2
+MarkupSafe==2.0.0          # via jinja2
 mccabe==0.6.1
 pep8-naming==0.11.1
 pep8==1.7.1
@@ -42,7 +42,7 @@ setoptconf==0.2.0
 six==1.16.0
 unidiff==0.6.0
 uritemplate.py==3.0.2
-Werkzeug==1.0.1         # via flask
+Werkzeug==2.0.0         # via flask
 wrapt==1.12.1
 xmltodict==0.12.0
 
