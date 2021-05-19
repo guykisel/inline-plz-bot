@@ -16,7 +16,7 @@ github3.py==2.0.0
 inlineplz==0.48.4
 isort==5.8.0
 itsdangerous==2.0.1
-Jinja2==3.0.0               # via flask
+Jinja2==3.0.1               # via flask
 lazy-object-proxy==1.6.0
 logilab-common==1.8.1
 MarkupSafe==2.0.1          # via jinja2
