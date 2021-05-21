@@ -11,7 +11,7 @@ colorama==0.4.4
 configparser==5.0.2
 docutils==0.17.1
 dodgy==0.2.1
-Flask==2.0.0
+Flask==2.0.1
 github3.py==2.0.0
 inlineplz==0.48.4
 isort==5.8.0
