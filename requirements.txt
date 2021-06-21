@@ -14,7 +14,7 @@ dodgy==0.2.1
 Flask==2.0.1
 github3.py==2.0.0
 inlineplz==0.50.0
-isort==5.9.0
+isort==5.9.1
 itsdangerous==2.0.1
 Jinja2==3.0.1               # via flask
 lazy-object-proxy==1.6.0
