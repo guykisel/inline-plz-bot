@@ -20,7 +20,7 @@ SAFE_ENV = os.environ.copy()
 SAFE_ENV['TOKEN'] = ''
 DOTFILES = 'dotfiles'
 STOP_FILE_NAME = '.inlineplzstop'
-REVIEWS_IN_PROGRESS = dict()
+REVIEWS_IN_PROGRESS = {}
 
 
 @app.errorhandler(Exception)
